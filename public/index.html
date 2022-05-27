@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanilla</title>
+</head>
+<body>
+    <h1>App Vanilla</h1>    
+    <button id="btnArquivo">Carregar arquivo JSON</button>
+    <button id="btnRequisitar">Requisitar dados JSON</button>
+    <button id="btnImagens">Carregar imagens</button>
+    <main>
+        <!-- O dados serão carregados pelo javascript -->
+    </main>
+
+    <script>
+
+        function getMain(){
+            return document.getElementsByTagName('main')[0];;
+        }
+
+        var btnArquivo = document.getElementById('btnArquivo');
+        btnArquivo.onclick = ()=>{
+
+            const lista = document.createElement('ul');
+
+            fetch('data/arquivo.json')
+            .then((response)=>{
+                return response.json()
+            }).then((produtos)=> {
+                for (const produto of produtos) {
+                    const item = document.createElement('li');
+                    item.innerText = produto.nome;
+                    lista.appendChild(item);     
+                }
+            });
+
+            var main = getMain();
+            main.appendChild(lista);
+        }
+
+        var btnRequisitar = document.getElementById('btnRequisitar');
+        btnRequisitar.onclick = () => {
+
+            const lista = document.createElement('ul');
+
+            fetch('http://localhost:3000/produtos')
+            .then((response)=>{
+                return response.json()
+            }).then((produtos)=> {
+                for (const produto of produtos) {
+                    const item = document.createElement('li');
+                    item.innerText = produto.nome;
+                    lista.appendChild(item);     
+                }
+            });
+
+            var main = getMain();
+            main.appendChild(lista);
+        }
+
+
+        var btnImagens = document.getElementById('btnImagens');
+        btnImagens.onclick = () => {
+
+            const imagem = document.createElement('img');
+
+            fetch('imgs/aperitivo1.jpg')
+            .then((response)=>{
+                return response.blob()
+            }).then((imagemCarregada)=> {
+                imagem.src = URL.createObjectURL(imagemCarregada);
+            });
+
+            var main = getMain();
+            main.appendChild(imagem);
+        }
+
+    </script>
+</body>
+</html>

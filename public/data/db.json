@@ -1,0 +1,19 @@
+{
+    "produtos" : [
+        {
+            "id": 1,
+            "nome" : "Smarthpone 1",
+            "desc" : "Descrição 1"
+        },
+        {
+            "id": 2,
+            "nome" : "Smarthpone 2",
+            "desc" : "Descrição 2"
+        },
+        {
+            "id": 3,
+            "nome" : "Smarthpone 3",
+            "desc" : "Descrição 3"
+        }
+    ]
+}
