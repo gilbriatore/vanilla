@@ -2,18 +2,18 @@
     "produtos" : [
         {
             "id": 1,
-            "nome" : "Smarthpone 1",
-            "desc" : "Descrição 1"
+            "nome": "iPhone 1",
+            "desc": "Smartphone 1"
         },
         {
             "id": 2,
-            "nome" : "Smarthpone 2",
-            "desc" : "Descrição 2"
+            "nome": "iPhone 2",
+            "desc": "Smartphone 2"
         },
         {
             "id": 3,
-            "nome" : "Smarthpone 3",
-            "desc" : "Descrição 3"
+            "nome": "iPhone 3",
+            "desc": "Smartphone 3"
         }
     ]
 }

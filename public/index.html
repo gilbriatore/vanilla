@@ -7,77 +7,65 @@
     <title>Vanilla</title>
 </head>
 <body>
-    <h1>App Vanilla</h1>    
-    <button id="btnArquivo">Carregar arquivo JSON</button>
-    <button id="btnRequisitar">Requisitar dados JSON</button>
-    <button id="btnImagens">Carregar imagens</button>
+    <h1>App Vanilla</h1>
+    <button id="btnArquivo">Carregar arquivo.json</button>
+    <button id="btnAPI">Requisitar API produtos json</button>
+    <button id="btnImagem">Carregar imagem</button>
+    <button id="btnProdutos">Carregar produtos</button>
     <main>
-        <!-- O dados serão carregados pelo javascript -->
+        <!--Conteúdo inserido pelo código javascript-->
     </main>
-
     <script>
 
-        function getMain(){
-            return document.getElementsByTagName('main')[0];;
-        }
+        var main = document.getElementsByTagName('main')[0];
 
+        function criarLista(produtos){
+            const lista = document.createElement('ul');
+            for (const produto of produtos) {
+                const item = document.createElement('li');
+                item.innerText = produto.nome;   
+                lista.appendChild(item);                                     
+            }
+            main.appendChild(lista);
+        }
+        
         var btnArquivo = document.getElementById('btnArquivo');
-        btnArquivo.onclick = ()=>{
-
-            const lista = document.createElement('ul');
-
-            fetch('data/arquivo.json')
-            .then((response)=>{
-                return response.json()
-            }).then((produtos)=> {
-                for (const produto of produtos) {
-                    const item = document.createElement('li');
-                    item.innerText = produto.nome;
-                    lista.appendChild(item);     
-                }
-            });
-
-            var main = getMain();
-            main.appendChild(lista);
+        var btnAPI = document.getElementById('btnAPI');
+        var btnImagem = document.getElementById('btnImagem');
+        
+        function carregarJson(url){
+            fetch(url)
+            .then((resposta)=> {
+                return resposta.json();
+            })
+            .then((json)=>{
+                criarLista(json);
+            })
         }
 
-        var btnRequisitar = document.getElementById('btnRequisitar');
-        btnRequisitar.onclick = () => {
-
-            const lista = document.createElement('ul');
-
-            fetch('http://localhost:3000/produtos')
-            .then((response)=>{
-                return response.json()
-            }).then((produtos)=> {
-                for (const produto of produtos) {
-                    const item = document.createElement('li');
-                    item.innerText = produto.nome;
-                    lista.appendChild(item);     
-                }
-            });
-
-            var main = getMain();
-            main.appendChild(lista);
+        function carregarImagem(url){
+            fetch(url)
+            .then((resposta)=> {
+                return resposta.blob();
+            })
+            .then((imgCarregada)=>{
+                var imgElemento = document.createElement('img');
+                imgElemento.src = URL.createObjectURL(imgCarregada);
+                main.appendChild(imgElemento);
+            })
         }
 
-
-        var btnImagens = document.getElementById('btnImagens');
-        btnImagens.onclick = () => {
-
-            const imagem = document.createElement('img');
-
-            fetch('imgs/aperitivo1.jpg')
-            .then((response)=>{
-                return response.blob()
-            }).then((imagemCarregada)=> {
-                imagem.src = URL.createObjectURL(imagemCarregada);
-            });
-
-            var main = getMain();
-            main.appendChild(imagem);
+        btnImagem.onclick = ()=>{
+            carregarImagem('imgs/carne1.jpg');
         }
 
+        btnArquivo.onclick = ()=>{           
+            carregarJson('data/arquivo.json');
+        }
+
+        btnAPI.onclick = ()=>{           
+            carregarJson('http://localhost:3000/produtos');
+        }
     </script>
 </body>
 </html>
