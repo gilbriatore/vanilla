@@ -24,6 +24,20 @@ function gerarLista(url){
     })
 }
 
+function enviar(produto, url, method, json){
+    fetch(url, {
+        method: method,
+        body: JSON.stringify(json),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(()=> {
+        gerarTabela('http://localhost:3000/produtos');
+    });
+}
+
 function carregarHtml(url, elemento, produto){
     fetch(url)
     .then((resposta)=> {
@@ -35,43 +49,51 @@ function carregarHtml(url, elemento, produto){
     .then(()=>{
         var txtNome = document.getElementById('nome');
         var txtDesc = document.getElementById('desc');
-        txtNome.value = produto.nome;
-        txtDesc.value = produto.desc;
+
+        if (produto != null){
+            txtNome.value = produto.nome;
+            txtDesc.value = produto.desc;
+        }
 
         var btnSalvar = document.getElementById('btnSalvar');
         btnSalvar.onclick = ()=>{
 
             var txtNome = document.getElementById('nome');
             var txtDesc = document.getElementById('desc');
-            var nomeAlterado = txtNome.value;
-            var descAlterado = txtDesc.value;
+            var nomeForm = txtNome.value;
+            var descForm = txtDesc.value;
 
             var json = {
-                "nome": nomeAlterado,
-                "desc": descAlterado
+                "nome": nomeForm,
+                "desc": descForm
             }
 
-            fetch('http://localhost:3000/produtos/' + produto.id, {
-                method: "PUT",
-                body: JSON.stringify(json),
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(()=> {
-                gerarTabela('http://localhost:3000/produtos');
-            });
-           
+            var url = 'http://localhost:3000/produtos'
+
+            if (produto != null){
+              enviar(produto, url + '/' + produto.id, 'PUT', json);                
+            } else {
+               enviar(produto, url, 'POST', json);                
+            }
         }
     });
 }
 
-function alterarProduto(produto){
+function configurarForm(produto){
     carregarHtml('html/form.html', main, produto);
 }
 
 function gerarTabela(url){
+    main.innerHTML = '';
+
+    var btnIncluir = document.createElement('button');
+    btnIncluir.innerText = "Incluir";
+    btnIncluir.onclick = ()=> {
+        configurarForm();
+    }
+
+    main.appendChild(btnIncluir);
+
     fetch(url)
     .then((resposta)=> {
         return resposta.json();
@@ -109,24 +131,42 @@ function gerarTabela(url){
 
             //4a coluna
             var td = document.createElement('td');
+
+            //Link editar
             var linkEditar = document.createElement('a');
             var txt = document.createTextNode('Editar');
             linkEditar.appendChild(txt);
             linkEditar.href = '#';
             linkEditar.onclick = ()=> {
-                alterarProduto(produto);
+                configurarForm(produto);
             }
-
             td.appendChild(linkEditar);
-            tr.appendChild(td);
-            
+
+            //Link excluir
+            var linkExcluir = document.createElement('a');
+            var txt = document.createTextNode('Excluir');
+            linkExcluir.appendChild(txt);
+            linkExcluir.href = '#';
+            linkExcluir.onclick = ()=> {
+                if (confirm('Tem certeza que deseja excluir o produto?')) {
+                    fetch('http://localhost:3000/produtos/' + produto.id, {
+                        method: "DELETE"                        
+                    })
+                    .then(()=> {
+                        gerarTabela('http://localhost:3000/produtos');
+                    });
+                }
+            }
+            td.appendChild(linkExcluir);
+
+            tr.appendChild(td);            
             tbody.appendChild(tr);
             
         }
 
         table.appendChild(tbody);
 
-        main.innerHTML = '';
+        
         main.appendChild(table);        
 
     })
@@ -146,18 +186,22 @@ function carregarImagem(url){
 }
 
 btnImagem.onclick = ()=>{
+    main.innerHTML = '';
     carregarImagem('imgs/carne1.jpg');
 }
 
-btnArquivo.onclick = ()=>{           
+btnArquivo.onclick = ()=>{     
+    main.innerHTML = '';      
     gerarLista('data/arquivo.json');
 }
 
-btnAPI.onclick = ()=>{           
+btnAPI.onclick = ()=>{     
+    main.innerHTML = '';      
     gerarLista('http://localhost:3000/produtos');
 }
 
 btnProdutos.onclick = ()=>{
+    main.innerHTML = '';
     gerarTabela('http://localhost:3000/produtos');
 }
 
