@@ -11,14 +11,9 @@
       "desc": "Smartphone 2"
     },
     {
-      "id": 3,
       "nome": "iPhone 3",
-      "desc": "Smartphone 3"
-    },
-    {
-      "nome": "aaa",
-      "desc": "aaa",
-      "id": 4
+      "desc": "Alterado",
+      "id": 3
     }
   ]
 }
