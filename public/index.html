@@ -11,61 +11,10 @@
     <button id="btnArquivo">Carregar arquivo.json</button>
     <button id="btnAPI">Requisitar API produtos json</button>
     <button id="btnImagem">Carregar imagem</button>
-    <button id="btnProdutos">Carregar produtos</button>
+    <button id="btnProdutos">Cadastrar produtos</button>
     <main>
         <!--Conteúdo inserido pelo código javascript-->
     </main>
-    <script>
-
-        var main = document.getElementsByTagName('main')[0];
-
-        function criarLista(produtos){
-            const lista = document.createElement('ul');
-            for (const produto of produtos) {
-                const item = document.createElement('li');
-                item.innerText = produto.nome;   
-                lista.appendChild(item);                                     
-            }
-            main.appendChild(lista);
-        }
-        
-        var btnArquivo = document.getElementById('btnArquivo');
-        var btnAPI = document.getElementById('btnAPI');
-        var btnImagem = document.getElementById('btnImagem');
-        
-        function carregarJson(url){
-            fetch(url)
-            .then((resposta)=> {
-                return resposta.json();
-            })
-            .then((json)=>{
-                criarLista(json);
-            })
-        }
-
-        function carregarImagem(url){
-            fetch(url)
-            .then((resposta)=> {
-                return resposta.blob();
-            })
-            .then((imgCarregada)=>{
-                var imgElemento = document.createElement('img');
-                imgElemento.src = URL.createObjectURL(imgCarregada);
-                main.appendChild(imgElemento);
-            })
-        }
-
-        btnImagem.onclick = ()=>{
-            carregarImagem('imgs/carne1.jpg');
-        }
-
-        btnArquivo.onclick = ()=>{           
-            carregarJson('data/arquivo.json');
-        }
-
-        btnAPI.onclick = ()=>{           
-            carregarJson('http://localhost:3000/produtos');
-        }
-    </script>
+    <script src="./js/javascript.js"></script>
 </body>
 </html>
