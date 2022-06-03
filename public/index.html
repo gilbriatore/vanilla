@@ -11,11 +11,146 @@
     <button id="btnArquivo">Carregar arquivo.json</button>
     <button id="btnAPI">Requisitar API produtos json</button>
     <button id="btnImagem">Carregar imagem</button>
-    <button id="btnProdutos">Carregar produtos</button>
+    <button id="btnProdutos">Cadastrar produtos</button>
     <main>
         <!--Conteúdo inserido pelo código javascript-->
     </main>
     <script>
+
+        function vincularClick(){
+            var btnSalvar = document.getElementById('btnSalvar');
+            btnSalvar.onclick = ()=> {
+                var form = new FormData(document.getElementById('frmProdutos'));
+                var nome = form.get('nome');
+                var desc = form.get('desc');
+
+                var json = {
+                    "nome": nome,
+                    "desc": desc
+                };
+
+                fetch("/produtos", {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                    body: JSON.stringify(json)
+                });
+            } 
+        }
+        
+        function carregarHTML(url, elemento) {
+                fetch(url).then((resposta) => {
+                    return resposta.text();
+                }).then((html) => {
+                   elemento.innerHTML = html;
+                }).then(()=>{
+                    vincularClick();
+                });
+            }
+
+        function carregarJson(url){
+            fetch(url)
+            .then((resposta)=> {
+                return resposta.json();
+            })
+            .then((json)=>{
+                criarLista(json);
+            })
+        }
+
+        function carregarJsonTabela(url){
+            fetch(url)
+            .then((resposta)=> {
+                return resposta.json();
+            })
+            .then((json)=>{
+                gerarTabela(json);
+            })
+        }
+
+
+
+
+        function gerarTabela(produtos) {
+
+            // get the reference for the main
+            var main = document.getElementsByTagName('main')[0];
+
+            var btnIncluir = document.createElement("button");
+            btnIncluir.innerText = "Incluir";
+            btnIncluir.onclick = ()=> {
+                carregarHTML('form.html', main);
+            }
+
+            main.appendChild(btnIncluir);
+
+
+            // creates a <table> element and a <tbody> element
+            var tbl = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+
+
+            var qtdeLinhas = produtos.length;
+            var qtdeColunas = 4;
+
+            // Gerar as linhas da tabela
+            for (var i = 0; i < qtdeLinhas; i++) {
+                var produto = produtos[i];
+
+
+                var row = document.createElement("tr");
+
+                // Gerar as colunas da tabela
+
+                var cell = document.createElement("td");
+                var cellText = document.createTextNode(produto.id);
+                cell.appendChild(cellText);
+                row.appendChild(cell);
+
+
+                var cell = document.createElement("td");
+                var cellText = document.createTextNode(produto.nome);
+                cell.appendChild(cellText);
+                row.appendChild(cell);
+
+
+                var cell = document.createElement("td");
+                var cellText = document.createTextNode(produto.desc);
+                cell.appendChild(cellText);
+                row.appendChild(cell);
+
+
+                var cell = document.createElement("td");
+                var cellText = document.createTextNode("Ações");
+                cell.appendChild(cellText);
+                row.appendChild(cell);
+
+
+
+
+                // for (var j = 0; j < qtdeColunas; j++) {
+                                
+                // var cell = document.createElement("td");
+                // var cellText = document.createTextNode("cell in row "+i+", column "+j);
+                // cell.appendChild(cellText);
+                // row.appendChild(cell);
+                // }
+
+                // add the row to the end of the table body
+                tblBody.appendChild(row);
+            }
+
+            // put the <tbody> in the <table>
+            tbl.appendChild(tblBody);
+            // appends <table> into <main>
+            main.appendChild(tbl);
+            // sets the border attribute of tbl to 2;
+            tbl.setAttribute("border", "2");
+        }
+
+
 
         var main = document.getElementsByTagName('main')[0];
 
@@ -32,16 +167,9 @@
         var btnArquivo = document.getElementById('btnArquivo');
         var btnAPI = document.getElementById('btnAPI');
         var btnImagem = document.getElementById('btnImagem');
+        var btnProdutos = document.getElementById('btnProdutos');
         
-        function carregarJson(url){
-            fetch(url)
-            .then((resposta)=> {
-                return resposta.json();
-            })
-            .then((json)=>{
-                criarLista(json);
-            })
-        }
+        
 
         function carregarImagem(url){
             fetch(url)
@@ -65,6 +193,10 @@
 
         btnAPI.onclick = ()=>{           
             carregarJson('http://localhost:3000/produtos');
+        }
+
+        btnProdutos.onclick = ()=> {
+            carregarJsonTabela('http://localhost:3000/produtos');
         }
     </script>
 </body>
