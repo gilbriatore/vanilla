@@ -154,7 +154,7 @@ function gerarTabela(url){
             var txt = document.createTextNode('Excluir');
             linkExcluir.setAttribute("id", produto.id);
             linkExcluir.appendChild(txt);
-            linkExcluir.href = '#';
+            linkExcluir.href = '#' + produto.id;
             linkExcluir.onclick = (event)=> {
                 if (confirm('Tem certeza que deseja excluir o produto?')) {
                     fetch('http://localhost:3000/produtos/' + event.target.id, {
