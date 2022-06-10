@@ -1,3 +1,8 @@
+//var mysql = require('mysql');
+
+//Como executar query para filtrar dados
+//http://localhost:3000/produtos?q=iphone
+
 var main = document.getElementsByTagName('main')[0];
 var btnArquivo = document.getElementById('btnArquivo');
 var btnAPI = document.getElementById('btnAPI');
@@ -74,8 +79,7 @@ function carregarHtml(url, elemento, produto){
               enviar(produto, url + '/' + produto.id, 'PUT', json);                
             } else {
                enviar(produto, url, 'POST', json);                
-            }
-            gerarTabela('http://localhost:3000/produtos');
+            }            
         }
 
         var btnVoltar = document.getElementById('btnVoltar');
