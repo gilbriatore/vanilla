@@ -138,10 +138,10 @@ function gerarTabela(url){
 
             //Link editar
             var linkEditar = document.createElement('a');
+            linkEditar.href = '#' + produto.id;
             linkEditar.setAttribute("id", produto.id);
             var txt = document.createTextNode('Editar');
-            linkEditar.appendChild(txt);
-            linkEditar.href = '#' + produto.id;
+            linkEditar.appendChild(txt);            
             linkEditar.onclick = (event)=> {
                 var id = event.target.id;               
                 var produto = listaDeProdutos.find(produto => produto.id == id);      
@@ -151,10 +151,10 @@ function gerarTabela(url){
 
             //Link excluir
             var linkExcluir = document.createElement('a');
-            var txt = document.createTextNode('Excluir');
-            linkExcluir.setAttribute("id", produto.id);
-            linkExcluir.appendChild(txt);
             linkExcluir.href = '#' + produto.id;
+            linkExcluir.setAttribute("id", produto.id);
+            var txt = document.createTextNode('Excluir');            
+            linkExcluir.appendChild(txt);            
             linkExcluir.onclick = (event)=> {
                 if (confirm('Tem certeza que deseja excluir o produto?')) {
                     fetch('http://localhost:3000/produtos/' + event.target.id, {
