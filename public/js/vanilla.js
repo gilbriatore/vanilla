@@ -83,6 +83,8 @@ function configurarForm(produto){
     carregarHtml('html/form.html', main, produto);
 }
 
+var listaDeProdutos; 
+
 function gerarTabela(url){
     main.innerHTML = '';
 
@@ -99,6 +101,8 @@ function gerarTabela(url){
         return resposta.json();
     })
     .then((produtos)=>{
+        listaDeProdutos = produtos;
+
         //Código de geração da tabela
         var table = document.createElement('table');
         var tbody = document.createElement('tbody');
@@ -134,10 +138,13 @@ function gerarTabela(url){
 
             //Link editar
             var linkEditar = document.createElement('a');
+            linkEditar.setAttribute("id", produto.id);
             var txt = document.createTextNode('Editar');
             linkEditar.appendChild(txt);
-            linkEditar.href = '#';
-            linkEditar.onclick = ()=> {
+            linkEditar.href = '#' + produto.id;
+            linkEditar.onclick = (event)=> {
+                var id = event.target.id;               
+                var produto = listaDeProdutos.find(produto => produto.id == id);      
                 configurarForm(produto);
             }
             td.appendChild(linkEditar);
@@ -145,11 +152,12 @@ function gerarTabela(url){
             //Link excluir
             var linkExcluir = document.createElement('a');
             var txt = document.createTextNode('Excluir');
+            linkExcluir.setAttribute("id", produto.id);
             linkExcluir.appendChild(txt);
             linkExcluir.href = '#';
-            linkExcluir.onclick = ()=> {
+            linkExcluir.onclick = (event)=> {
                 if (confirm('Tem certeza que deseja excluir o produto?')) {
-                    fetch('http://localhost:3000/produtos/' + produto.id, {
+                    fetch('http://localhost:3000/produtos/' + event.target.id, {
                         method: "DELETE"                        
                     })
                     .then(()=> {
