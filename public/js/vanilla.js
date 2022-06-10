@@ -75,7 +75,14 @@ function carregarHtml(url, elemento, produto){
             } else {
                enviar(produto, url, 'POST', json);                
             }
+            gerarTabela('http://localhost:3000/produtos');
         }
+
+        var btnVoltar = document.getElementById('btnVoltar');
+        btnVoltar.onclick = ()=>{
+            gerarTabela('http://localhost:3000/produtos');
+        };
+
     });
 }
 
