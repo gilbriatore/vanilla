@@ -1,5 +1,3 @@
-//var mysql = require('mysql');
-
 //Como executar query para filtrar dados
 //http://localhost:3000/produtos?q=iphone
 
